@@ -116,8 +116,8 @@
   svg#mapSvg{display:block;width:100%;height:auto;touch-action:manipulation;}
   .tr-shape{fill:var(--map-fill);stroke:var(--map-stroke);stroke-width:2.2;}
   .sea-bg{fill:#bfe0ea;}
-  .neighbor-shape{fill:#cfcfcf;stroke:#9a9a9a;stroke-width:0.8;}
-  .province-shape{fill:#ffffff;stroke:#8a8a8a;stroke-width:1;}
+  .neighbor-shape{fill:#e4ddc9;stroke:#c9bd9e;stroke-width:0.8;}
+  .province-shape{stroke:#ffffff;stroke-width:1.1;filter:drop-shadow(0 1px 0.5px rgba(44,38,32,0.12));}
   .province-shape-colored{stroke:#ffffff;stroke-width:1;}
   .tr-outline-strong{fill:none;stroke:#3a342a;stroke-width:2.2;}
   .province-label{
@@ -703,10 +703,11 @@ function renderMapBase(){
       });
     });
 
-    PROVINCES_XY.forEach(pr=>{
+    PROVINCES_XY.forEach((pr, i)=>{
       const path = document.createElementNS(ns,'path');
       path.setAttribute('d', ringToPath(pr.pts));
       path.setAttribute('class','province-shape');
+      path.setAttribute('fill', PROVINCE_PALETTE[i % PROVINCE_PALETTE.length]);
       svg.appendChild(path);
     });
     const outerPath = document.createElementNS(ns,'path');
