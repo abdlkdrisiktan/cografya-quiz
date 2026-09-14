@@ -14,6 +14,10 @@
     --ink:#2c2620;
     --tunnel:#2b6f8f;
     --border-gate:#3c7a3f;
+    --lake:#1a7fb0;
+    --mountain:#7a5230;
+    --plain:#8a9a3b;
+    --dam:#6b4fa0;
     --wrong:#c81e2c;
     --correct:#2f8f4e;
     --card:#ffffff;
@@ -108,6 +112,10 @@
   }
   .tag-tunnel{background:var(--tunnel);}
   .tag-border{background:var(--border-gate);}
+  .tag-lake{background:var(--lake);}
+  .tag-mountain{background:var(--mountain);}
+  .tag-plain{background:var(--plain);}
+  .tag-dam{background:var(--dam);}
   .tag-oil{background:#a0522d;}
   .tag-gas{background:#1f6fb2;}
 
@@ -130,6 +138,10 @@
   .marker circle.dot-inner{fill:var(--red);stroke:#fff;stroke-width:1.5;}
   .marker.tunnel circle.dot-inner{fill:var(--tunnel);}
   .marker.border circle.dot-inner{fill:var(--border-gate);}
+  .marker.lake circle.dot-inner{fill:var(--lake);}
+  .marker.mountain circle.dot-inner{fill:var(--mountain);}
+  .marker.plain circle.dot-inner{fill:var(--plain);}
+  .marker.dam circle.dot-inner{fill:var(--dam);}
   .marker.correct-mark circle.dot-inner{fill:var(--correct);}
   .marker.wrong-mark circle.dot-inner{fill:var(--wrong);}
   .pulse{
@@ -227,8 +239,9 @@
     <div class="option-group">
       <label class="group-title">2) Soru grubu seç</label>
       <div class="pill-row" id="familyPills">
-        <button class="pill family-pill active" data-family="points">📍 Geçitler &amp; Sınır Kapıları</button>
-        <button class="pill family-pill" data-family="pipelines">🛢️ Petrol &amp; Doğalgaz Hatları</button>
+        <button class="pill family-pill active" data-group="transport">📍 Geçitler &amp; Sınır Kapıları</button>
+        <button class="pill family-pill" data-group="natural">🏔️ Göl, Dağ, Ova &amp; Baraj</button>
+        <button class="pill family-pill" data-group="pipelines">🛢️ Petrol &amp; Doğalgaz Hatları</button>
       </div>
     </div>
     <div class="option-group">
@@ -378,7 +391,63 @@ const POINT_ITEMS = [
   {id:'oncupinar', cat:'border', name:'Öncüpınar', lat:36.72, lon:37.10, neighbor:'Suriye',
     info:'Kilis\'te, Suriye sınırındadır.'},
   {id:'akcakale', cat:'border', name:'Akçakale', lat:36.72, lon:38.95, neighbor:'Suriye',
-    info:'Şanlıurfa\'da, Suriye sınırındadır.'}
+    info:'Şanlıurfa\'da, Suriye sınırındadır.'},
+
+  {id:'van-golu', cat:'lake', name:'Van Gölü', lat:38.62, lon:42.80,
+    info:'Türkiye\'nin en büyük gölü. Volkanik set (baraj) gölüdür; Nemrut Dağı\'nın lavlarının önünü kapatmasıyla oluşmuştur. Sodalı (alkali) bir göl olduğu için balık çeşidi azdır, sadece inci kefali yaşar.'},
+  {id:'tuz-golu', cat:'lake', name:'Tuz Gölü', lat:38.75, lon:33.40,
+    info:'Ankara, Konya ve Aksaray arasında yer alır; yüzölçümü bakımından Türkiye\'nin ikinci büyük gölüdür. Tektonik kökenlidir, çok sığdır ve yaz aylarında büyük ölçüde kurur; tuz üretimi yapılır.'},
+  {id:'beysehir-golu', cat:'lake', name:'Beyşehir Gölü', lat:37.73, lon:31.50,
+    info:'Konya ve Isparta arasındadır. Türkiye\'nin en büyük tatlı su gölüdür, tektonik-karstik kökenlidir.'},
+  {id:'egirdir-golu', cat:'lake', name:'Eğirdir Gölü', lat:37.88, lon:30.85,
+    info:'Isparta\'dadır. Göller Yöresi\'nin en derin ve ikinci büyük tatlı su gölüdür, tektonik-karstik kökenlidir.'},
+  {id:'iznik-golu', cat:'lake', name:'İznik Gölü', lat:40.43, lon:29.52,
+    info:'Bursa\'dadır. Tektonik kökenli bir göldür; kıyısındaki İznik ilçesiyle tarihi öneme sahiptir.'},
+  {id:'salda-golu', cat:'lake', name:'Salda Gölü', lat:37.55, lon:29.68,
+    info:'Burdur\'dadır. Karstik kökenli, oldukça derin bir göldür. Beyaz kumsalları ve turkuaz rengiyle bilinir; NASA tarafından Mars\'taki göl tabanlarına benzerliğiyle incelenmiştir.'},
+  {id:'burdur-golu', cat:'lake', name:'Burdur Gölü', lat:37.72, lon:30.17,
+    info:'Burdur\'dadır. Tektonik kökenli, sodalı bir göldür; sulama ve iklim değişikliğine bağlı su çekilmesiyle son yıllarda küçülmesi çevresel bir sorun olarak gündeme gelir.'},
+  {id:'cildir-golu', cat:'lake', name:'Çıldır Gölü', lat:41.13, lon:43.15,
+    info:'Kars ve Ardahan arasındadır. Türkiye\'nin en yüksek rakımlı büyük gölüdür (~1960 m); kışın buz tutar, buz üzerinde at arabası ve balık avı ile bilinir.'},
+
+  {id:'agri-dagi', cat:'mountain', name:'Ağrı Dağı', lat:39.70, lon:44.30,
+    info:'Iğdır ve Ağrı arasında yer alır; Türkiye\'nin en yüksek zirvesidir (Büyük Ağrı, 5137 m). Sönmüş bir volkandır, zirvesi yıl boyu karlı/buzulludur.'},
+  {id:'erciyes-dagi', cat:'mountain', name:'Erciyes Dağı', lat:38.52, lon:35.45,
+    info:'Kayseri\'dedir. İç Anadolu\'nun en yüksek dağıdır (3917 m), sönmüş bir volkandır; kayak merkeziyle bilinir.'},
+  {id:'uludag', cat:'mountain', name:'Uludağ', lat:40.10, lon:29.13,
+    info:'Bursa\'dadır (2543 m). Eski adı Mysia Olympos\'tur; kış turizmi (kayak) merkezi olarak ünlüdür.'},
+  {id:'kackar-dagi', cat:'mountain', name:'Kaçkar Dağı', lat:40.87, lon:41.12,
+    info:'Rize ve Artvin arasındadır (3937 m). Doğu Karadeniz Dağları\'nın en yüksek zirvesidir; buzul gölleri ve yaylalarıyla bilinir.'},
+  {id:'suphan-dagi', cat:'mountain', name:'Süphan Dağı', lat:38.93, lon:42.82,
+    info:'Bitlis\'te (Van Gölü\'nün kuzeyinde) yer alır; Türkiye\'nin ikinci yüksek zirvesidir (4058 m), sönmüş bir volkandır.'},
+  {id:'hasan-dagi', cat:'mountain', name:'Hasan Dağı', lat:38.13, lon:34.17,
+    info:'Aksaray ve Niğde arasındadır (3268 m). Sönmüş bir volkandır; Çatalhöyük\'te bulunan ve dünyanın bilinen en eski şehir tasvirlerinden biri kabul edilen duvar resminde betimlendiği düşünülür.'},
+
+  {id:'cukurova', cat:'plain', name:'Çukurova', lat:36.95, lon:35.30,
+    info:'Adana ve Mersin\'de, Seyhan ve Ceyhan nehirlerinin taşıdığı alüvyonlarla oluşmuş bir delta ovasıdır. Türkiye\'nin en verimli ve en büyük ovalarından biridir; yoğun tarım (pamuk, narenciye) yapılır.'},
+  {id:'konya-ovasi', cat:'plain', name:'Konya Ovası', lat:37.87, lon:32.49,
+    info:'Konya\'dadır. Yüzölçümü bakımından Türkiye\'nin en büyük ovasıdır; karasal iklim nedeniyle kurak, karstik obruklarıyla (çöküntü çukurları) dikkat çeker.'},
+  {id:'bafra-ovasi', cat:'plain', name:'Bafra Ovası', lat:41.57, lon:35.90,
+    info:'Samsun\'dadır. Kızılırmak\'ın oluşturduğu bir delta ovasıdır; tütün ve çeltik tarımıyla bilinir.'},
+  {id:'carsamba-ovasi', cat:'plain', name:'Çarşamba Ovası', lat:41.20, lon:36.72,
+    info:'Samsun\'dadır. Yeşilırmak\'ın oluşturduğu bir delta ovasıdır; fındık ve çeltik tarımıyla bilinir.'},
+  {id:'amik-ovasi', cat:'plain', name:'Amik Ovası', lat:36.35, lon:36.35,
+    info:'Hatay\'dadır. Eskiden bir göl olan Amik Gölü\'nün kurutulmasıyla tarım alanına kazandırılmış bir ova (çöküntü/tektonik kökenli) ovasıdır.'},
+  {id:'igdir-ovasi', cat:'plain', name:'Iğdır Ovası', lat:39.92, lon:44.05,
+    info:'Iğdır\'dadır. Aras Nehri kıyısında, çevresine göre çok daha alçakta kalan bir çöküntü ovasıdır; Türkiye\'nin en sıcak ve kurak yerlerinden biridir, pamuk yetiştirilir.'},
+
+  {id:'ataturk-baraji', cat:'dam', name:'Atatürk Barajı', lat:37.48, lon:38.84,
+    info:'Şanlıurfa ve Adıyaman arasında, Fırat Nehri üzerindedir. GAP\'ın (Güneydoğu Anadolu Projesi) en büyük barajıdır; hem enerji üretimi hem de Harran Ovası\'nın sulanması amacıyla yapılmıştır.'},
+  {id:'keban-baraji', cat:'dam', name:'Keban Barajı', lat:38.80, lon:38.75,
+    info:'Elazığ\'da, Fırat Nehri üzerindedir. Fırat üzerinde yapılan ilk büyük barajdır; enerji üretimi amaçlıdır.'},
+  {id:'karakaya-baraji', cat:'dam', name:'Karakaya Barajı', lat:38.27, lon:39.05,
+    info:'Diyarbakır ve Malatya arasında, Fırat Nehri üzerindedir. Enerji üretim kapasitesi bakımından Türkiye\'nin en büyük barajlarından biridir.'},
+  {id:'birecik-baraji', cat:'dam', name:'Birecik Barajı', lat:37.03, lon:37.98,
+    info:'Şanlıurfa\'da, Fırat Nehri üzerindedir; GAP kapsamında yapılmıştır.'},
+  {id:'ilisu-baraji', cat:'dam', name:'Ilısu Barajı', lat:37.53, lon:41.75,
+    info:'Mardin ve Şırnak arasında, Dicle Nehri üzerindedir. GAP\'ın Dicle havzasındaki en büyük barajıdır.'},
+  {id:'deriner-baraji', cat:'dam', name:'Deriner Barajı', lat:41.10, lon:41.65,
+    info:'Artvin\'de, Çoruh Nehri üzerindedir. Gövde yüksekliği bakımından Türkiye\'nin en yüksek barajıdır.'}
 ];
 POINT_ITEMS.forEach(it=>{ const p = proj(it.lon, it.lat); it.x = p.x; it.y = p.y; });
 
@@ -437,7 +506,8 @@ const PIPELINES = RAW_PIPELINES.map(p=>({
 /* ================= STATE ================= */
 let state = {
   mapStyle: 'plain',      // 'plain' | 'political' | 'political_labeled'
-  family: 'points',       // 'points' | 'pipelines'
+  group: 'transport',     // 'transport' | 'natural' | 'pipelines' (topic group, drives family below)
+  family: 'points',       // 'points' | 'pipelines' (game mechanic: tap-a-point vs tap-a-line)
   category: 'all',
   mode: 'locate',          // 'locate' | 'identify'
   queue: [],
@@ -478,7 +548,11 @@ function shuffle(arr){
   return a;
 }
 function pointItemsByCat(cat){
-  return cat==='all' ? POINT_ITEMS.slice() : POINT_ITEMS.filter(i=>i.cat===cat);
+  if(cat==='all'){
+    const cats = GROUP_CONFIG[state.group].cats;
+    return POINT_ITEMS.filter(i=>cats.includes(i.cat));
+  }
+  return POINT_ITEMS.filter(i=>i.cat===cat);
 }
 function pipelineItemsByCat(cat){
   return cat==='all' ? PIPELINES.slice() : PIPELINES.filter(i=>i.group===cat);
@@ -486,12 +560,20 @@ function pipelineItemsByCat(cat){
 function currentPool(cat){
   return state.family==='points' ? pointItemsByCat(cat) : pipelineItemsByCat(cat);
 }
+const POINT_CAT_META = {
+  tunnel:   {label:'Tünel / Geçit',  tag:'tag-tunnel'},
+  border:   {label:'Sınır Kapısı',   tag:'tag-border'},
+  lake:     {label:'Göl',            tag:'tag-lake'},
+  mountain: {label:'Dağ',            tag:'tag-mountain'},
+  plain:    {label:'Ova',            tag:'tag-plain'},
+  dam:      {label:'Baraj',          tag:'tag-dam'}
+};
 function catLabel(item){
-  if(state.family==='points') return item.cat==='tunnel' ? 'Tünel / Geçit' : 'Sınır Kapısı';
+  if(state.family==='points') return POINT_CAT_META[item.cat].label;
   return item.group==='oil' ? 'Petrol Hattı' : 'Doğalgaz Hattı';
 }
 function catTagClass(item){
-  if(state.family==='points') return item.cat==='tunnel' ? 'tag-tunnel' : 'tag-border';
+  if(state.family==='points') return POINT_CAT_META[item.cat].tag;
   return item.group==='oil' ? 'tag-oil' : 'tag-gas';
 }
 function distractorPool(item){
@@ -499,12 +581,28 @@ function distractorPool(item){
   return PIPELINES.filter(i=>i.group===item.group && i.id!==item.id);
 }
 
-/* ================= START SCREEN SETUP ================= */
+/* ================= START SCREEN SETUP =================
+   "group" = topic group the user picks in step 2 (transport / natural / pipelines).
+   "family" = underlying game mechanic (points = tap-a-spot, pipelines = tap-a-line).
+   transport and natural share the points mechanic but must not mix their items,
+   so each group carries its own restricted list of point categories. */
+const GROUP_CONFIG = {
+  transport: {family:'points', cats:['tunnel','border']},
+  natural:   {family:'points', cats:['lake','mountain','plain','dam']},
+  pipelines: {family:'pipelines', cats:['oil','gas']}
+};
 const CATEGORY_CONFIG = {
-  points: [
+  transport: [
     {value:'all', label:'Hepsi (25)'},
     {value:'tunnel', label:'Sadece Tüneller / Geçitler'},
     {value:'border', label:'Sadece Sınır Kapıları'}
+  ],
+  natural: [
+    {value:'all', label:'Hepsi (26)'},
+    {value:'lake', label:'Sadece Göller'},
+    {value:'mountain', label:'Sadece Dağlar'},
+    {value:'plain', label:'Sadece Ovalar'},
+    {value:'dam', label:'Sadece Barajlar'}
   ],
   pipelines: [
     {value:'all', label:'Hepsi (10)'},
@@ -523,8 +621,12 @@ const MODE_CONFIG = {
   ]
 };
 const LEGEND_CONFIG = {
-  points: `<span><span class="dot" style="background:var(--tunnel)"></span>Tünel / Dağ Geçidi</span>
-           <span><span class="dot" style="background:var(--border-gate)"></span>Sınır Kapısı</span>`,
+  transport: `<span><span class="dot" style="background:var(--tunnel)"></span>Tünel / Dağ Geçidi</span>
+              <span><span class="dot" style="background:var(--border-gate)"></span>Sınır Kapısı</span>`,
+  natural: `<span><span class="dot" style="background:var(--lake)"></span>Göl</span>
+            <span><span class="dot" style="background:var(--mountain)"></span>Dağ</span>
+            <span><span class="dot" style="background:var(--plain)"></span>Ova</span>
+            <span><span class="dot" style="background:var(--dam)"></span>Baraj</span>`,
   pipelines: `<span><span class="swatch" style="background:#a0522d"></span>Petrol Hatları (kahverengi/turuncu)</span>
               <span><span class="swatch" style="background:#1f6fb2"></span>Doğalgaz Hatları (mavi/yeşil/mor)</span>`
 };
@@ -532,7 +634,7 @@ const LEGEND_CONFIG = {
 function renderCategoryPills(){
   const wrap = document.getElementById('categoryPills');
   wrap.innerHTML='';
-  CATEGORY_CONFIG[state.family].forEach((c,i)=>{
+  CATEGORY_CONFIG[state.group].forEach((c,i)=>{
     const btn = document.createElement('button');
     btn.className='pill'+(i===0?' active':'');
     btn.dataset.cat = c.value;
@@ -544,7 +646,7 @@ function renderCategoryPills(){
     });
     wrap.appendChild(btn);
   });
-  state.category = CATEGORY_CONFIG[state.family][0].value;
+  state.category = CATEGORY_CONFIG[state.group][0].value;
 }
 function renderModePills(){
   const wrap = document.getElementById('modePills');
@@ -564,7 +666,7 @@ function renderModePills(){
   state.mode = MODE_CONFIG[state.family][0].value;
 }
 function renderLegend(){
-  document.getElementById('legendBox').innerHTML = LEGEND_CONFIG[state.family];
+  document.getElementById('legendBox').innerHTML = LEGEND_CONFIG[state.group];
 }
 function refreshStartScreen(){
   renderCategoryPills();
@@ -584,7 +686,8 @@ document.querySelectorAll('#familyPills .pill').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     document.querySelectorAll('#familyPills .pill').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
-    state.family = btn.dataset.family;
+    state.group = btn.dataset.group;
+    state.family = GROUP_CONFIG[state.group].family;
     refreshStartScreen();
   });
 });
@@ -622,10 +725,14 @@ function openReference(){
   const content = document.getElementById('refContent');
   content.innerHTML = '';
   if(state.family==='points'){
-    ['tunnel','border'].forEach(c=>{
+    const REF_SECTION_TITLES = {
+      tunnel:'Tünel / Dağ Geçitleri', border:'Sınır Kapıları',
+      lake:'Göller', mountain:'Dağlar', plain:'Ovalar', dam:'Barajlar'
+    };
+    GROUP_CONFIG[state.group].cats.forEach(c=>{
       const title = document.createElement('div');
       title.className='ref-section-title';
-      title.textContent = c==='tunnel' ? 'Tünel / Dağ Geçitleri' : 'Sınır Kapıları';
+      title.textContent = REF_SECTION_TITLES[c];
       content.appendChild(title);
       pointItemsByCat(c).forEach(it=>{
         const div = document.createElement('div');
