@@ -128,6 +128,10 @@
   .province-shape{stroke:#ffffff;stroke-width:1.1;filter:drop-shadow(0 1px 0.5px rgba(44,38,32,0.12));}
   .province-shape-colored{stroke:#ffffff;stroke-width:1;}
   .tr-outline-strong{fill:none;stroke:#3a342a;stroke-width:2.2;}
+  .province-quiz-shape{fill:var(--map-fill);stroke:var(--map-stroke);stroke-width:1.1;cursor:pointer;}
+  .province-quiz-shape.target-mark{fill:#ffd23f;stroke:var(--red);stroke-width:2.4;}
+  .province-quiz-shape.correct-mark{fill:var(--correct) !important;stroke:#1c5c33;stroke-width:2;}
+  .province-quiz-shape.wrong-mark{fill:var(--wrong) !important;stroke:#8f1520;stroke-width:2;}
   .province-label{
     font-size:8px;fill:#2c2620;text-anchor:middle;dominant-baseline:middle;
     paint-order:stroke; stroke:#faf6ec; stroke-width:1.3px; stroke-linejoin:round;
@@ -242,6 +246,7 @@
         <button class="pill family-pill active" data-group="transport">📍 Geçitler &amp; Sınır Kapıları</button>
         <button class="pill family-pill" data-group="natural">🏔️ Göl, Dağ, Ova &amp; Baraj</button>
         <button class="pill family-pill" data-group="pipelines">🛢️ Petrol &amp; Doğalgaz Hatları</button>
+        <button class="pill family-pill" data-group="cities">🏙️ Şehir Bulmaca (İlleri Tanı)</button>
       </div>
     </div>
     <div class="option-group">
@@ -557,8 +562,13 @@ function pointItemsByCat(cat){
 function pipelineItemsByCat(cat){
   return cat==='all' ? PIPELINES.slice() : PIPELINES.filter(i=>i.group===cat);
 }
+function provinceItemsByCat(cat){
+  return cat==='all' ? PROVINCE_ITEMS.slice() : PROVINCE_ITEMS.filter(i=>i.region===cat);
+}
 function currentPool(cat){
-  return state.family==='points' ? pointItemsByCat(cat) : pipelineItemsByCat(cat);
+  if(state.family==='points') return pointItemsByCat(cat);
+  if(state.family==='pipelines') return pipelineItemsByCat(cat);
+  return provinceItemsByCat(cat);
 }
 const POINT_CAT_META = {
   tunnel:   {label:'Tünel / Geçit',  tag:'tag-tunnel'},
@@ -578,8 +588,39 @@ function catTagClass(item){
 }
 function distractorPool(item){
   if(state.family==='points') return POINT_ITEMS.filter(i=>i.cat===item.cat && i.id!==item.id);
-  return PIPELINES.filter(i=>i.group===item.group && i.id!==item.id);
+  if(state.family==='pipelines') return PIPELINES.filter(i=>i.group===item.group && i.id!==item.id);
+  return PROVINCE_ITEMS.filter(i=>i.id!==item.id);
 }
+
+/* ================= CITY PUZZLE DATA (şehir bulmaca) =================
+   Maps each of the 81 provinces already outlined in PROVINCES_XY to its
+   geographic region, so the group can be filtered like the other games. */
+const REGION_LABELS = {
+  marmara:'Marmara', ege:'Ege', akdeniz:'Akdeniz', icanadolu:'İç Anadolu',
+  karadeniz:'Karadeniz', doguanadolu:'Doğu Anadolu', guneydoguanadolu:'Güneydoğu Anadolu'
+};
+const PROVINCE_REGION = {
+  'İstanbul':'marmara','Kocaeli':'marmara','Sakarya':'marmara','Bursa':'marmara','Yalova':'marmara',
+  'Bilecik':'marmara','Çanakkale':'marmara','Balıkesir':'marmara','Tekirdağ':'marmara','Edirne':'marmara','Kırklareli':'marmara',
+  'İzmir':'ege','Manisa':'ege','Aydın':'ege','Denizli':'ege','Muğla':'ege','Uşak':'ege','Kütahya':'ege','Afyon':'ege',
+  'Antalya':'akdeniz','Isparta':'akdeniz','Burdur':'akdeniz','Mersin':'akdeniz','Adana':'akdeniz','Osmaniye':'akdeniz','Hatay':'akdeniz','Kahramanmaraş':'akdeniz',
+  'Ankara':'icanadolu','Konya':'icanadolu','Kayseri':'icanadolu','Sivas':'icanadolu','Yozgat':'icanadolu','Çankırı':'icanadolu',
+  'Kırıkkale':'icanadolu','Kırşehir':'icanadolu','Nevşehir':'icanadolu','Niğde':'icanadolu','Aksaray':'icanadolu','Karaman':'icanadolu','Eskişehir':'icanadolu',
+  'Zonguldak':'karadeniz','Bartın':'karadeniz','Karabük':'karadeniz','Kastamonu':'karadeniz','Çorum':'karadeniz','Amasya':'karadeniz',
+  'Samsun':'karadeniz','Ordu':'karadeniz','Giresun':'karadeniz','Trabzon':'karadeniz','Rize':'karadeniz','Artvin':'karadeniz',
+  'Gümüşhane':'karadeniz','Bayburt':'karadeniz','Tokat':'karadeniz','Sinop':'karadeniz','Düzce':'karadeniz','Bolu':'karadeniz',
+  'Erzurum':'doguanadolu','Erzincan':'doguanadolu','Kars':'doguanadolu','Ardahan':'doguanadolu','Iğdır':'doguanadolu','Ağrı':'doguanadolu',
+  'Van':'doguanadolu','Muş':'doguanadolu','Bitlis':'doguanadolu','Bingöl':'doguanadolu','Tunceli':'doguanadolu','Elazığ':'doguanadolu','Malatya':'doguanadolu','Hakkari':'doguanadolu',
+  'Gaziantep':'guneydoguanadolu','Şanlıurfa':'guneydoguanadolu','Diyarbakır':'guneydoguanadolu','Mardin':'guneydoguanadolu',
+  'Siirt':'guneydoguanadolu','Şırnak':'guneydoguanadolu','Batman':'guneydoguanadolu','Kilis':'guneydoguanadolu','Adıyaman':'guneydoguanadolu'
+};
+const PROVINCE_ITEMS = PROVINCES_XY.map(pr=>{
+  const region = PROVINCE_REGION[pr.n];
+  return {
+    id: pr.n, name: pr.n, region,
+    info: `${pr.n}, ${REGION_LABELS[region]} Bölgesi'nde yer alır.`
+  };
+});
 
 /* ================= START SCREEN SETUP =================
    "group" = topic group the user picks in step 2 (transport / natural / pipelines).
@@ -589,7 +630,8 @@ function distractorPool(item){
 const GROUP_CONFIG = {
   transport: {family:'points', cats:['tunnel','border']},
   natural:   {family:'points', cats:['lake','mountain','plain','dam']},
-  pipelines: {family:'pipelines', cats:['oil','gas']}
+  pipelines: {family:'pipelines', cats:['oil','gas']},
+  cities:    {family:'provinces', cats:['marmara','ege','akdeniz','icanadolu','karadeniz','doguanadolu','guneydoguanadolu']}
 };
 const CATEGORY_CONFIG = {
   transport: [
@@ -608,6 +650,16 @@ const CATEGORY_CONFIG = {
     {value:'all', label:'Hepsi (10)'},
     {value:'oil', label:'Sadece Petrol Hatları'},
     {value:'gas', label:'Sadece Doğalgaz Hatları'}
+  ],
+  cities: [
+    {value:'all', label:'Hepsi (81)'},
+    {value:'marmara', label:'Marmara Bölgesi'},
+    {value:'ege', label:'Ege Bölgesi'},
+    {value:'akdeniz', label:'Akdeniz Bölgesi'},
+    {value:'icanadolu', label:'İç Anadolu Bölgesi'},
+    {value:'karadeniz', label:'Karadeniz Bölgesi'},
+    {value:'doguanadolu', label:'Doğu Anadolu Bölgesi'},
+    {value:'guneydoguanadolu', label:'Güneydoğu Anadolu Bölgesi'}
   ]
 };
 const MODE_CONFIG = {
@@ -618,6 +670,10 @@ const MODE_CONFIG = {
   pipelines: [
     {value:'locate', label:'🗺️ Haritada Bul (isim verilir, doğru hat gösterilir)'},
     {value:'identify', label:'❓ İsmini Bil (hat ışıklı, isim seçilir)'}
+  ],
+  provinces: [
+    {value:'locate', label:'📍 Haritada Bul (isim verilir, il işaretlenir)'},
+    {value:'identify', label:'❓ İsmini Bil (il işaretli, isim seçilir)'}
   ]
 };
 const LEGEND_CONFIG = {
@@ -628,7 +684,9 @@ const LEGEND_CONFIG = {
             <span><span class="dot" style="background:var(--plain)"></span>Ova</span>
             <span><span class="dot" style="background:var(--dam)"></span>Baraj</span>`,
   pipelines: `<span><span class="swatch" style="background:#a0522d"></span>Petrol Hatları (kahverengi/turuncu)</span>
-              <span><span class="swatch" style="background:#1f6fb2"></span>Doğalgaz Hatları (mavi/yeşil/mor)</span>`
+              <span><span class="swatch" style="background:#1f6fb2"></span>Doğalgaz Hatları (mavi/yeşil/mor)</span>`,
+  cities: `<span><span class="dot" style="background:#ffd23f"></span>Hedef / dokunduğun il sarıyla işaretlenir</span>
+           <span>🏙️ Bu modda harita otomatik olarak il sınırlarıyla gösterilir</span>`
 };
 
 function renderCategoryPills(){
@@ -741,6 +799,19 @@ function openReference(){
         content.appendChild(div);
       });
     });
+  } else if(state.family==='provinces'){
+    GROUP_CONFIG[state.group].cats.forEach(c=>{
+      const title = document.createElement('div');
+      title.className='ref-section-title';
+      title.textContent = REGION_LABELS[c] + ' Bölgesi';
+      content.appendChild(title);
+      provinceItemsByCat(c).forEach(it=>{
+        const div = document.createElement('div');
+        div.className='ref-item';
+        div.innerHTML = `<div class="rname">${it.name}</div><div class="rdesc">${it.info}</div>`;
+        content.appendChild(div);
+      });
+    });
   } else {
     ['oil','gas'].forEach(c=>{
       const title = document.createElement('div');
@@ -784,6 +855,11 @@ function renderMapBase(){
   const svg = document.getElementById('mapSvg');
   svg.innerHTML = '';
   const ns = 'http://www.w3.org/2000/svg';
+
+  if(state.family === 'provinces'){
+    drawProvincesBase();
+    return;
+  }
 
   if(state.mapStyle === 'plain'){
     const pathData = OUTLINE_XY.map(ringToPath).join(' ');
@@ -846,6 +922,41 @@ function renderMapBase(){
   }
 }
 
+/* Şehir bulmaca haritası: her il tıklanabilir, kendi başına renklendirilmiş
+   ve etiketsiz — isim tahmin edilecek/bulunacak, o yüzden yazı gösterilmez. */
+function drawProvincesBase(){
+  const svg = document.getElementById('mapSvg');
+  const ns = 'http://www.w3.org/2000/svg';
+
+  const sea = document.createElementNS(ns,'rect');
+  sea.setAttribute('x',0); sea.setAttribute('y',0);
+  sea.setAttribute('width',920); sea.setAttribute('height',400);
+  sea.setAttribute('class','sea-bg');
+  svg.appendChild(sea);
+
+  NEIGHBORS_XY.forEach(nb=>{
+    nb.rings.forEach(ring=>{
+      const path = document.createElementNS(ns,'path');
+      path.setAttribute('d', ringToPath(ring));
+      path.setAttribute('class','neighbor-shape');
+      svg.appendChild(path);
+    });
+  });
+
+  PROVINCES_XY.forEach(pr=>{
+    const path = document.createElementNS(ns,'path');
+    path.setAttribute('d', ringToPath(pr.pts));
+    path.setAttribute('class','province-quiz-shape');
+    path.setAttribute('data-name', pr.n);
+    svg.appendChild(path);
+  });
+
+  const outerPath = document.createElementNS(ns,'path');
+  outerPath.setAttribute('d', OUTLINE_XY.map(ringToPath).join(' '));
+  outerPath.setAttribute('class','tr-outline-strong');
+  svg.appendChild(outerPath);
+}
+
 function nextQuestion(){
   state.answered = false;
   document.getElementById('feedbackCard').classList.add('hidden');
@@ -877,7 +988,7 @@ function nextQuestion(){
       drawPulsingPoint(item);
       renderOptions(item);
     }
-  } else {
+  } else if(state.family==='pipelines'){
     if(state.mode==='locate'){
       banner.innerHTML = `Bu hat haritada hangisi? <b>${item.name}</b><span class="cat-tag ${catTagClass(item)}">${catLabel(item)}</span>`;
       hint.textContent = 'Haritadaki hatlardan doğru olduğunu düşündüğüne dokun.';
@@ -888,6 +999,17 @@ function nextQuestion(){
       hint.textContent = 'Diğer hatlar soluk gösteriliyor. Doğru ismi aşağıdan seç.';
       drawAllPipelinesFaint();
       drawActivePipeline(item, item.color, true);
+      renderOptions(item);
+    }
+  } else {
+    if(state.mode==='locate'){
+      banner.innerHTML = `Bu il haritada nerede? <b>${item.name}</b>`;
+      hint.textContent = 'Haritada olduğunu düşündüğün ile dokun.';
+      attachLocateHandlerProvince(item);
+    } else {
+      banner.innerHTML = `Sarıyla işaretli il hangisi?`;
+      hint.textContent = 'İşaretli ilin ismini aşağıdan seç.';
+      highlightTargetProvince(item);
       renderOptions(item);
     }
   }
@@ -1051,6 +1173,44 @@ function handlePipelineLocateAnswer(item, tapX, tapY){
   showFeedback(isCorrect, item, extraMsg);
 }
 
+/* ---------- PROVINCE MODE: Şehir Bulmaca ---------- */
+function attachLocateHandlerProvince(item){
+  const svg = document.getElementById('mapSvg');
+  function handler(evt){
+    if(state.answered) return;
+    const touch = evt.touches && evt.touches.length ? evt.touches[0] : evt;
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    const path = el && el.closest ? el.closest('path[data-name]') : null;
+    handleProvinceLocateAnswer(item, path ? path.dataset.name : null);
+  }
+  svg.addEventListener('click', handler, {once:true});
+  svg.addEventListener('touchstart', handler, {once:true});
+}
+function handleProvinceLocateAnswer(item, tappedName){
+  state.answered = true;
+  const isCorrect = tappedName === item.name;
+  registerAnswer(isCorrect, item);
+  const svg = document.getElementById('mapSvg');
+  const correctPath = svg.querySelector(`path[data-name="${item.name}"]`);
+  if(correctPath) correctPath.classList.add('correct-mark');
+  let extraMsg = '';
+  if(!isCorrect){
+    if(tappedName){
+      extraMsg = `Dokunduğun il: ${tappedName}.`;
+      const wrongPath = svg.querySelector(`path[data-name="${tappedName}"]`);
+      if(wrongPath) wrongPath.classList.add('wrong-mark');
+    } else {
+      extraMsg = 'Haritanın boş bir alanına dokundun.';
+    }
+  }
+  showFeedback(isCorrect, item, extraMsg);
+}
+function highlightTargetProvince(item){
+  const svg = document.getElementById('mapSvg');
+  const path = svg.querySelector(`path[data-name="${item.name}"]`);
+  if(path) path.classList.add('target-mark');
+}
+
 /* ---------- IDENTIFY MODE (shared options) ---------- */
 function renderOptions(item){
   const grid = document.getElementById('optionsGrid');
@@ -1078,8 +1238,15 @@ function renderOptions(item){
 
       if(state.family==='points'){
         drawStaticMarker(item.x, item.y, item.cat, isCorrect?'correct-mark':'wrong-mark');
-      } else {
+      } else if(state.family==='pipelines'){
         drawActivePipeline(item, isCorrect ? '#2f8f4e' : '#c81e2c', false);
+      } else {
+        const svg = document.getElementById('mapSvg');
+        const path = svg.querySelector(`path[data-name="${item.name}"]`);
+        if(path){
+          path.classList.remove('target-mark');
+          path.classList.add(isCorrect?'correct-mark':'wrong-mark');
+        }
       }
       showFeedback(isCorrect, item);
     });
