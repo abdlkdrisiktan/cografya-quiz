@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Türkiye Coğrafya Oyunu - Geçitler, Sınır Kapıları, Boru Hatları</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Quizofya - Türkiye Coğrafya Oyunu</title>
 <style>
   :root{
     --red:#c81e2c;
@@ -33,7 +33,20 @@
     user-select:none;
     overscroll-behavior:none;
   }
-  #app{max-width:1000px;margin:0 auto;padding:14px 14px 30px;min-height:100%;}
+  html{background:#f3ecd8;}
+  body{background-attachment:fixed;}
+  /* Mobilde kaydırılan içerik durum çubuğunun altında görünmesin */
+  body::before{
+    content:"";position:fixed;top:0;left:0;right:0;z-index:40;pointer-events:none;
+    height:var(--safe-area-inset-top, env(safe-area-inset-top, 0px));background:#fbf7ee;
+  }
+  #app{
+    max-width:1000px;margin:0 auto;min-height:100%;
+    padding:calc(14px + var(--safe-area-inset-top, env(safe-area-inset-top, 0px)))
+      calc(14px + var(--safe-area-inset-right, env(safe-area-inset-right, 0px)))
+      calc(30px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)))
+      calc(14px + var(--safe-area-inset-left, env(safe-area-inset-left, 0px)));
+  }
   h1{font-size:clamp(19px,3.2vw,27px);margin:6px 0 2px;color:var(--red-dark);text-align:center;}
   .subtitle{text-align:center;color:#6b5f4f;margin:0 0 4px;font-size:14px;}
   .motivation-line{
@@ -194,6 +207,27 @@
   .feedback-route{margin:8px 0 0;font-size:13px;color:#6b5f4f;font-style:italic;}
   .continue-btn{margin-top:14px;}
 
+  /* YATAY TELEFON: oyun ekranında harita solda, soru/şıklar/geri bildirim sağda */
+  @media (orientation:landscape) and (max-height:600px){
+    body.in-game h1, body.in-game .subtitle, body.in-game #motivationLine{display:none;}
+    #gameScreen{
+      display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto auto auto auto 1fr;
+      column-gap:12px;align-items:start;
+    }
+    #gameScreen .game-header{grid-column:1 / -1;margin-bottom:6px;}
+    #gameScreen .map-wrap{grid-column:1;grid-row:2 / -1;}
+    #gameScreen .question-banner, #gameScreen .question-hint,
+    #gameScreen .options-grid, #gameScreen .feedback-card{grid-column:2;}
+    .question-banner{padding:8px;font-size:15px;}
+    svg#mapSvg{
+      max-height:calc(100dvh - 90px - var(--safe-area-inset-top, env(safe-area-inset-top, 0px))
+        - var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+    }
+    .options-grid{grid-template-columns:1fr;gap:8px;margin-top:4px;}
+    .feedback-card{margin-top:4px;padding:12px;}
+    .continue-btn{margin-top:10px;}
+  }
+
   /* END SCREEN */
   .result-score{font-size:48px;font-weight:800;text-align:center;color:var(--red-dark);margin:6px 0;}
   .result-sub{text-align:center;color:#6b5f4f;margin-bottom:16px;}
@@ -208,10 +242,12 @@
   .modal-overlay{
     position:fixed;inset:0;background:rgba(30,24,16,0.55);display:flex;align-items:flex-end;
     justify-content:center;z-index:50;
+    padding-top:var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
   }
   .modal-box{
     background:var(--cream);width:100%;max-width:640px;max-height:82vh;overflow-y:auto;
     border-radius:20px 20px 0 0;padding:18px;
+    padding-bottom:calc(18px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
   }
   .modal-box h2{margin-top:0;color:var(--red-dark);font-size:19px;}
   .ref-item{padding:10px 0;border-bottom:1px solid #e6dcc0;}
@@ -226,7 +262,7 @@
 </head>
 <body>
 <div id="app">
-  <h1>🇹🇷 Türkiye Coğrafya Oyunu</h1>
+  <h1>🇹🇷 Quizofya</h1>
   <p class="subtitle">KPSS Coğrafya · Harita Üzerinden Görsel Hafıza Çalışması</p>
   <p class="motivation-line" id="motivationLine"></p>
 
@@ -829,7 +865,28 @@ function openReference(){
   document.getElementById('refModal').classList.remove('hidden');
 }
 
+/* ================= ANDROID (Capacitor) ================= */
+if(window.Capacitor && window.Capacitor.isNativePlatform()){
+  const { App, StatusBar } = window.Capacitor.Plugins;
+  if(StatusBar) StatusBar.setStyle({ style: 'LIGHT' }).catch(()=>{});
+  // Geri tuşu: açık pencereyi kapat, oyundan çıkışı sor, ana menüdeyse uygulamadan çık
+  App.addListener('backButton', ()=>{
+    const openModal = document.querySelector('.modal-overlay:not(.hidden)');
+    if(openModal){ openModal.classList.add('hidden'); return; }
+    if(!document.getElementById('gameScreen').classList.contains('hidden')){
+      document.getElementById('quitModal').classList.remove('hidden');
+      return;
+    }
+    if(!document.getElementById('endScreen').classList.contains('hidden')){
+      showScreen('start');
+      return;
+    }
+    App.exitApp();
+  });
+}
+
 function showScreen(name){
+  document.body.classList.toggle('in-game', name==='game');
   document.getElementById('startScreen').classList.toggle('hidden', name!=='start');
   document.getElementById('gameScreen').classList.toggle('hidden', name!=='game');
   document.getElementById('endScreen').classList.toggle('hidden', name!=='end');

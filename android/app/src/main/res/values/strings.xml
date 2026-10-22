@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Quizofya</string>
+    <string name="title_activity_main">Quizofya</string>
+    <string name="package_name">tr.com.quizofya</string>
+    <string name="custom_url_scheme">tr.com.quizofya</string>
+</resources>

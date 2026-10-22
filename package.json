@@ -1,0 +1,22 @@
+{
+  "name": "quizofya",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Quizofya - Türkiye coğrafya quiz oyunu",
+  "scripts": {
+    "build": "rm -rf www && mkdir -p www && cp index.html www/",
+    "sync": "npm run build && npx cap sync android",
+    "open": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.5.3"
+  }
+}

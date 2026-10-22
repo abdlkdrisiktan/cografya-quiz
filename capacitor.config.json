@@ -1,0 +1,15 @@
+{
+  "appId": "tr.com.quizofya",
+  "appName": "Quizofya",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#faf6ec"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 800,
+      "backgroundColor": "#faf6ec",
+      "showSpinner": false
+    }
+  }
+}
