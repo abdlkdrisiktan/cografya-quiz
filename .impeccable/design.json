@@ -1,0 +1,264 @@
+{
+ "schemaVersion": 2,
+ "generatedAt": "2026-11-24T10:11:57",
+ "title": "Design System: Quizofya",
+ "extensions": {
+  "colorMeta": {
+   "iznik-cobalt": {
+    "role": "primary",
+    "displayName": "İznik Kobaltı",
+    "tonalRamp": [
+     "#0a1638",
+     "#0f2257",
+     "#132c73",
+     "#1d3f9e",
+     "#3a5cc0",
+     "#6f8bd6",
+     "#a9bbe8",
+     "#e3eafa"
+    ]
+   },
+   "turquoise-glaze": {
+    "role": "secondary",
+    "displayName": "Turkuaz Sır",
+    "tonalRamp": [
+     "#053a39",
+     "#075755",
+     "#0c7d7b",
+     "#14a3a1",
+     "#3fbfbd",
+     "#7bd5d3",
+     "#b5e9e8",
+     "#e6f7f7"
+    ]
+   },
+   "bolus-red": {
+    "role": "tertiary",
+    "displayName": "İznik Kırmızısı",
+    "tonalRamp": [
+     "#4a110b",
+     "#721a12",
+     "#9a2318",
+     "#d8392b",
+     "#e5675c",
+     "#ee968e",
+     "#f6c5c0",
+     "#fcecea"
+    ]
+   },
+   "emerald-glaze": {
+    "role": "tertiary",
+    "displayName": "Zümrüt Sır",
+    "tonalRamp": [
+     "#0a3a22",
+     "#14613a",
+     "#1a7643",
+     "#1f8a4c",
+     "#4aa772",
+     "#82c69f",
+     "#bfe3cd",
+     "#ecf7f0"
+    ]
+   },
+   "manganese": {
+    "role": "tertiary",
+    "displayName": "Mangan Moru",
+    "tonalRamp": [
+     "#2e1427",
+     "#552649",
+     "#683158",
+     "#7a3b69",
+     "#9a6189",
+     "#bb91ad",
+     "#dcc3d3",
+     "#f6ecf2"
+    ]
+   },
+   "frit-white": {
+    "role": "neutral",
+    "displayName": "Frit Beyazı"
+   },
+   "bisque": {
+    "role": "neutral",
+    "displayName": "Bisküvi"
+   }
+  },
+  "typographyMeta": {
+   "display": {
+    "displayName": "Display",
+    "purpose": "Tur sonu skoru ve seviye rakamı."
+   },
+   "headline": {
+    "displayName": "Headline",
+    "purpose": "Soru kartındaki yer adı, pencere başlıkları."
+   },
+   "title": {
+    "displayName": "Title",
+    "purpose": "Pano adı, buton ve görev başlıkları."
+   },
+   "body": {
+    "displayName": "Body",
+    "purpose": "Açıklamalar ve bilgi kartları."
+   },
+   "label": {
+    "displayName": "Label",
+    "purpose": "Etiketler ve sayaçlar."
+   }
+  },
+  "shadows": [
+   {
+    "name": "lift",
+    "value": "0 2px 0 rgba(14,31,85,.25), 0 8px 18px -8px rgba(5,14,45,.55)",
+    "purpose": "Kobalt zemin üstündeki sırlı levhalar."
+   },
+   {
+    "name": "glaze-band",
+    "value": "inset 0 7px 0 var(--band)",
+    "purpose": "Levhanın üstündeki konu rengi sır bandı."
+   },
+   {
+    "name": "press-red",
+    "value": "0 4px 0 #9a2318",
+    "purpose": "Birincil butonun basılabilir alt kenarı."
+   }
+  ],
+  "motion": [
+   {
+    "name": "ease-out",
+    "value": "cubic-bezier(.16,1,.3,1)",
+    "purpose": "Bütün giriş ve geçişler."
+   },
+   {
+    "name": "tile-flip",
+    "value": "rotateX(-80deg) → none, 340ms",
+    "purpose": "Sorular arası sert çini dönmesi."
+   },
+   {
+    "name": "glaze-sweep",
+    "value": "translateX(-120%) → 120%, 900ms",
+    "purpose": "Doğru cevapta sonuç çinisinden geçen parıltı."
+   }
+  ],
+  "breakpoints": [
+   {
+    "name": "landscape-phone",
+    "value": "max-height: 520px and landscape"
+   },
+   {
+    "name": "portrait-narrow",
+    "value": "max-width: 720px and portrait"
+   },
+   {
+    "name": "desktop",
+    "value": "min-width: 900px and min-height: 600px"
+   }
+  ]
+ },
+ "components": [
+  {
+   "name": "Primary Button",
+   "kind": "button",
+   "refersTo": "button-primary",
+   "description": "Ekrandaki tek kırmızı eylem.",
+   "html": "<button class=\"ds-btn-primary\">Oyuna Başla</button>",
+   "css": ".ds-btn-primary{background:#d8392b;color:#fff;border:none;border-radius:6px;padding:13px 18px;font:800 17px Rubik,system-ui,sans-serif;box-shadow:0 4px 0 #9a2318;cursor:pointer;transition:transform .1s,box-shadow .1s}.ds-btn-primary:active{transform:translateY(3px);box-shadow:0 1px 0 #9a2318}.ds-btn-primary:focus-visible{outline:3px solid #ffd9d4;outline-offset:2px}"
+  },
+  {
+   "name": "Secondary Button",
+   "kind": "button",
+   "refersTo": "button-secondary",
+   "description": "Turkuaz mürekkep ikincil eylem.",
+   "html": "<button class=\"ds-btn-turq\">Yanlışları Tekrar</button>",
+   "css": ".ds-btn-turq{background:#0c7d7b;color:#fff;border:none;border-radius:6px;padding:13px 18px;font:800 17px Rubik,system-ui,sans-serif;box-shadow:0 4px 0 #054a49;cursor:pointer}.ds-btn-turq:active{transform:translateY(3px);box-shadow:0 1px 0 #054a49}.ds-btn-turq:focus-visible{outline:3px solid #ffd9d4;outline-offset:2px}"
+  },
+  {
+   "name": "Pill",
+   "kind": "chip",
+   "refersTo": "pill",
+   "description": "Konu ve harita seçimi.",
+   "html": "<span class=\"ds-pill\">Göller</span><span class=\"ds-pill ds-on\">Hepsi (26)</span>",
+   "css": ".ds-pill{display:inline-block;margin:3px;border:2px solid #c9d6ea;background:#fff;color:#0e1f55;padding:8px 11px;border-radius:6px;font:700 13.5px Rubik,system-ui,sans-serif}.ds-pill.ds-on{background:#1d3f9e;border-color:#1d3f9e;color:#fff}"
+  },
+  {
+   "name": "Pano",
+   "kind": "card",
+   "refersTo": "surface-card",
+   "description": "Konu panosu: sır bandı, ad, çini ızgarası.",
+   "html": "<div class=\"ds-pano\"><b>Göl, Dağ, Ova ve Baraj</b><small>3/26 sırlı</small><div class=\"ds-tiles\"><i class=\"t2\"></i><i class=\"t2\"></i><i class=\"t1\"></i><i class=\"t3\"></i><i></i><i></i></div></div>",
+   "css": ".ds-pano{width:150px;background:#f3f7fc;border-radius:6px;padding:15px 10px 10px;box-shadow:inset 0 7px 0 #1f8a4c,0 2px 0 rgba(14,31,85,.25),0 8px 18px -8px rgba(5,14,45,.55);font-family:Rubik,system-ui,sans-serif;color:#0e1f55}.ds-pano b{display:block;font-size:15px;font-weight:800}.ds-pano small{color:#3d4f86;font-weight:600;font-size:12.5px}.ds-tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-top:8px}.ds-tiles i{aspect-ratio:1;border-radius:2px;background:#e7d6bf;box-shadow:inset 0 0 0 1px #cdb79a}.ds-tiles i.t1{background:linear-gradient(135deg,#1f8a4c 0 22%,#fff 22% 78%,#1f8a4c 78%);box-shadow:inset 0 0 0 1px #1f8a4c}.ds-tiles i.t2{background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.75) 0 12%,transparent 13%),#1f8a4c;box-shadow:none}.ds-tiles i.t3{background:linear-gradient(118deg,transparent 46%,#7a3b69 46% 54%,transparent 54%),#e7d6bf;box-shadow:inset 0 0 0 1px #7a3b69}"
+  },
+  {
+   "name": "Level Medal",
+   "kind": "custom",
+   "description": "İki katmanlı sekiz köşeli yıldız madalyon.",
+   "html": "<div class=\"ds-medal\"><span>7</span></div>",
+   "css": ".ds-medal{position:relative;width:44px;height:44px;display:grid;place-items:center;background:#1d3f9e}.ds-medal::before,.ds-medal::after{content:\"\";position:absolute;inset:5px;background:#14a3a1;border-radius:3px}.ds-medal::after{transform:rotate(45deg)}.ds-medal span{position:absolute;inset:8px;z-index:1;display:grid;place-items:center;font:900 16px Rubik,system-ui,sans-serif;color:#1d3f9e}.ds-medal span::before,.ds-medal span::after{content:\"\";position:absolute;inset:2px;background:#f3f7fc;border-radius:2px;z-index:-1}.ds-medal span::after{transform:rotate(45deg)}"
+  },
+  {
+   "name": "Answer Option",
+   "kind": "button",
+   "refersTo": "option-button",
+   "description": "İsmini Bil şıkkı; doğru zümrüt, yanlış mangan.",
+   "html": "<button class=\"ds-opt\">Van Gölü</button><button class=\"ds-opt ds-ok\">Tuz Gölü</button><button class=\"ds-opt ds-bad\">Eğirdir Gölü</button>",
+   "css": ".ds-opt{display:block;width:240px;margin:6px 0;padding:9px 11px;border-radius:6px;border:2px solid transparent;background:#f3f7fc;color:#0e1f55;font:700 14px Rubik,system-ui,sans-serif;text-align:left;box-shadow:0 3px 0 #9fb0d3}.ds-opt.ds-ok{background:#dcf1e3;border-color:#1f8a4c;color:#14613a;box-shadow:0 3px 0 #1f8a4c}.ds-opt.ds-bad{background:#f1e2ec;border-color:#7a3b69;color:#552649;box-shadow:0 3px 0 #7a3b69}"
+  }
+ ],
+ "narrative": {
+  "northStar": "İznik Çini Atölyesi",
+  "overview": "Her yer bir çinidir; oyuncu doğru bildikçe çini pişer (bisküvi, astar, sırlı), yanlış cevap çiniyi çatlatır ve tekrar turu onu onarır. Zemin baştan sona İznik kobaltıdır; yüzeyler sırlı beyaz levhalardır ve üstlerinde konunun sır rengiyle bir bant taşırlar. Harita turkuaz çerçevede ekranın en büyük nesnesidir. Enerji parlak ve doygundur, ama kırmızı sadece aktif olana aittir.",
+  "keyCharacteristics": [
+   "Kobalt zemin, süsleme sadece zeminde ve madalyonda.",
+   "Sırlı beyaz levhalar, 6 px köşe, üstte sır bandı.",
+   "Çini durumları ilerlemenin kendisidir.",
+   "Tek yazı ailesi Rubik, gömülü.",
+   "Elle çizilmiş 2.2 px SVG ikonlar."
+  ],
+  "rules": [
+   {
+    "name": "The Tek Kırmızı Rule",
+    "body": "İznik kırmızısı ekrandaki tek aktif renktir: birincil buton ve haritadaki hedef.",
+    "section": "colors"
+   },
+   {
+    "name": "The Çatlak Mor Rule",
+    "body": "Yanlış cevap ve çatlak çini her zaman mangan morudur.",
+    "section": "colors"
+   },
+   {
+    "name": "The Mürekkep Turkuaz Rule",
+    "body": "Üzerinde küçük beyaz yazı olan turkuaz dolgu #0c7d7b'dir.",
+    "section": "colors"
+   },
+   {
+    "name": "The Tek Aile Rule",
+    "body": "Bütün metin Rubik'tir; hiyerarşiyi boyut ve ağırlık taşır.",
+    "section": "typography"
+   },
+   {
+    "name": "The Başlık Üstü Etiket Yok Rule",
+    "body": "Başlık üstüne kicker/eyebrow satırı konmaz.",
+    "section": "typography"
+   },
+   {
+    "name": "The Sır Bandı Rule",
+    "body": "Levhanın kimliği üstteki iç bant ile verilir; kenar ya da yan şerit kullanılmaz.",
+    "section": "elevation"
+   }
+  ],
+  "dos": [
+   "Do zemini her ekranda İznik kobaltı ve kafes deseniyle doldur.",
+   "Do yeni konu grubuna bir sır rengi ver ve panoda çini ızgarasıyla göster.",
+   "Do ilerlemeyi çini durumlarıyla anlat.",
+   "Do haritayı turkuaz çerçevede en büyük nesne olarak tut.",
+   "Do ikonları 24×24, 2.2 px çizgili SVG sembol olarak ekle."
+  ],
+  "donts": [
+   "Don't kırmızıyı madalyon, yıldız, seri, bant ya da yanlış cevap için kullanma.",
+   "Don't yanlış cevabı kırmızıyla gösterme.",
+   "Don't başlıkların üstüne kicker/eyebrow satırı koyma.",
+   "Don't emoji ya da Unicode glifini ikon yerine kullanma.",
+   "Don't kalp simgesi kullanma.",
+   "Don't harici font ya da ağ isteği ekleme."
+  ]
+ }
+}

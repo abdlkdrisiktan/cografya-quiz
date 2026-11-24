@@ -3,12 +3,12 @@
   "appName": "Quizofya",
   "webDir": "www",
   "android": {
-    "backgroundColor": "#faf6ec"
+    "backgroundColor": "#1d3f9e"
   },
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 800,
-      "backgroundColor": "#faf6ec",
+      "backgroundColor": "#1d3f9e",
       "showSpinner": false
     }
   }
