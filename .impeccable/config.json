@@ -1,0 +1,23 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "docs/privacy.html"
+        ],
+        "createdAt": "2026-11-24T11:04:06.045Z",
+        "reason": "Claude triage: top inset band (inset 0 7px 0), not a side border; sanctioned by DESIGN.md 'Sır Bandı Rule' (line 187)"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "ui\",sans-serif",
+        "createdAt": "2026-11-24T10:56:12.981Z",
+        "reason": "Claude: parser artifact from the system-ui fallback in docs/privacy.html font stack, not a real font"
+      }
+    ]
+  }
+}
